@@ -33,6 +33,14 @@ class BookDao(object):
         con.commit()
 
     @staticmethod
+    def deleteByISBN(isbn):
+        """ Delete """
+        con = DB.getCon()
+        cursor = DB.getCursor()
+        cursor.execute('delete from t_book WHERE isbn=?', (isbn,))
+        con.commit()
+
+    @staticmethod
     def update(id,isbn='', name='', stock=0, descr='', rate=0):
         """ Update """
         def encapStr(str):
