@@ -30,21 +30,33 @@ def addBookButtonProcess(btn):
         app.clearAllEntries()
 
 def deleteBookButtonProcess(btn):
-    pass
+    if btn == '删除':
+        isbn=app.getEntry('isbnEntry_delete')
+        if isbn == '':
+            app.errorBox('非法输入','请输入有效字符')
+            return
+        else:
+            BookDao.deleteByISBN(isbn)
+            app.warningBox('操作成功','删除书籍成功')
+            app.hideSubWindow('deleteWin')
+    if btn == '取消':
+        app.clearAllEntries()
 
 def showLabelEntry(item):
     if item == '添加':
         app.showSubWindow('addWin')
+    elif item == '删除':
+        app.showSubWindow('deleteWin')
 app=gui('图书管理系统','500x300')
 app.setFont(12,font='YaHei')
 app.createMenu('开始')
 app.addMenuItem('开始','添加',showLabelEntry,shortcut='A',underline=1)
-app.addMenuItem('开始','删除',shortcut='D',underline=1)
+app.addMenuItem('开始','删除',showLabelEntry,shortcut='D',underline=1)
 app.addMenuItem('开始','更新',shortcut='U',underline=1)
 app.addMenuItem('开始','查询',shortcut='S',underline=1)
 
 # 初始化 添加窗口subWindow
-app.startSubWindow('addWin','添加窗口',True)
+app.startSubWindow('addWin','添加窗口')
 app.setGeometry(500,300)
 app.setStretch("column")
 app.setSticky('nw')
@@ -89,7 +101,8 @@ app.addLabel('isbnLabel_delete', 'isbn号', 1, 0)
 app.setLabelWidth('isbnLabel_delete', 5)
 app.addEntry('isbnEntry_delete', 1, 1)
 app.setEntryWidth('isbnEntry_delete', 40)
-app.addButton('提交',deleteBookButtonProcess,2,0)
-app.addButton('重置',deleteBookButtonProcess,2,1)
+app.addButton('删除',deleteBookButtonProcess,2,0)
+app.addButton('取消',deleteBookButtonProcess,2,2)
 app.stopSubWindow()
+
 app.go()
